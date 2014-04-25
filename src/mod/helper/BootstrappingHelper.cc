@@ -19,11 +19,7 @@ using namespace ns3;
 BootstrappingHelper::BootstrappingHelper(string filename,string output,int gsize,uint32_t interestsNum,uint32_t seed)
 {
 	std::cout<<"Constructing BootstrappingHelper"<<std::endl;
-
-	stringstream st;
-	st << seed;
-
-	this->seed=st.str();
+	this->seed=seed;
 	this->filename=filename;
 	this->interestsNum=interestsNum;
 	this->output=output;
@@ -170,7 +166,11 @@ void BootstrappingHelper::startExperiment()
 		for(unsigned c=0;c<20;c++)
 		{
 			ExperimentGlobals::RANDOM_VAR =CreateObject<UniformRandomVariable>();
-			RngSeedManager::SetSeed (std::atoi(seed.c_str())+c);
+			RngSeedManager::SetSeed (seed+c);
+
+			stringstream st;
+			st << seed+c;
+			this->seedString=st.str();
 
 			set <uint32_t> group=select(d1,gs);
 			uint32_t dataOwner=selectOwner(d1,group);
@@ -374,7 +374,7 @@ void BootstrappingHelper::PITCheck(int gs,int exp,set<uint32_t> group,Graph topo
 
 			ofstream file;
 
-			string secondPartPath="CCN/pit_stats/gs-"+st.str()+"-experiment-"+st2.str()+"-group_nodes-"+group_nodes+"-seed-"+seed+".txt";
+			string secondPartPath="CCN/pit_stats/gs-"+st.str()+"-experiment-"+st2.str()+"-group_nodes-"+group_nodes+"-seed-"+seedString+".txt";
 			string tempPath=output+secondPartPath;
 			const char* tempPath2=tempPath.c_str();
 
