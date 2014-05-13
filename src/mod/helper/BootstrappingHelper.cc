@@ -278,6 +278,7 @@ void BootstrappingHelper::startExperiment()
 
 			file << "experiment "<<c<<" groupsize "<<gs<<" participants ["<<module.at(nodeToModule.find( dataOwner )->second)->getNodeId()<<",";  //prota emfanizetai i pigi
 
+
 			for(unsigned i=0;i<gs;i++)
 			{
 				file<<vec.at(i)->getModule()->getNodeId();
@@ -364,7 +365,7 @@ void BootstrappingHelper::PITCheck(int gs,int exp,set<uint32_t> group,Graph topo
 
 	for(unsigned i=0;i<module.size();i++)
 	{
-		if(module.at(i)->getNodeId() != owner )
+		if(module.at(i)->getNodeId() != module.at(nodeToModule.find( owner )->second)->getNodeId() )
 		{
 			stringstream st;
 			st << gs;
@@ -382,7 +383,7 @@ void BootstrappingHelper::PITCheck(int gs,int exp,set<uint32_t> group,Graph topo
 
 			file<<"router "<<module.at(i)->getNodeId()<<" pit_entries "<<module.at(i)->getPIT()->getSize();
 
-			if(topology.isItCoreNode(module.at(i)->getNodeId()))
+			if(topology.isItCoreNode(module.at(i)->getNodeId()+1))//+1 because the implementation of our graph used to calculate the degree here ,counts from 1
 			{
 				file<<" core";
 			}
